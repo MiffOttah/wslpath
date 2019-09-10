@@ -1,0 +1,18 @@
+wslpath - Convert native Windows paths to WSL, and vice versa.
+
+wslpath [OPTION] [PATH1 [PATH2 ...]]
+
+If no PATHs are specified, the current directory is used instead.
+
+Options:
+  -u --unix     Outputs UNIX/Linux paths
+  -w --windows  Outputs Windows paths
+  --help        Displays this text
+  --version     Displays version information
+
+Returns:
+  0 if all paths are successfully converted
+  1 if a path could not be converted (for example, a path within WSL's internal filesystem)
+  2 for an incorrect command line
+ 
+Copyright 2019 Miff <miff@miffthefox.info>
