@@ -35,11 +35,11 @@ namespace WslPath
 
                 case "-u":
                 case "--unix":
-                    return FormatPaths(new LinuxPathFormatter(), argsQueue);
+                    return FormatPaths(PathFormat.Unix, argsQueue);
 
                 case "-w":
                 case "--windows":
-                    return FormatPaths(new WindowsPathFormatter(), argsQueue);
+                    return FormatPaths(PathFormat.Windows, argsQueue);
 
                 default:
                     Console.Error.WriteLine("Unrecognized argument: " + option);
@@ -47,13 +47,20 @@ namespace WslPath
             }
         }
 
-        internal static int FormatPaths(IPathFormatter formatter, Queue<string> paths)
+        internal static int FormatPaths(PathFormat format, Queue<string> paths)
         {
             bool error = false;
 
             while (paths.Count > 0)
             {
-                Console.Out.WriteLine(formatter.Format(paths.Dequeue(), ref error));
+                if (PathComponents.TryParse(paths.Dequeue(), out var components))
+                {
+                    Console.Out.WriteLine(components.ToString(format));
+                }
+                else
+                {
+                    error = true;
+                }
             }
 
             return error ? 1 : 0;
