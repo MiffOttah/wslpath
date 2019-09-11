@@ -85,7 +85,44 @@ namespace WslPath
 
         public string ToString(PathFormat format)
         {
-            throw new NotImplementedException();
+            var pathBuilder = new StringBuilder();
+            char pathSeparator = format == PathFormat.Unix ? '/' : '\\';
+
+            if (DriveLetter.HasValue)
+            {
+                if (format == PathFormat.Unix)
+                {
+                    pathBuilder.Append("/mnt/");
+                    pathBuilder.Append(char.ToLowerInvariant(DriveLetter.Value));
+
+                    if (Components.Count > 0)
+                    {
+                        pathBuilder.Append(pathSeparator);
+                    }
+                }
+                else
+                {
+                    pathBuilder.Append(DriveLetter.Value);
+                    pathBuilder.Append(":\\");
+                }
+            }
+
+            bool first = true;
+            foreach (string component in Components)
+            {
+                if (first)
+                {
+                    first = false;
+                }
+                else
+                {
+                    pathBuilder.Append(pathSeparator);
+                }
+
+                pathBuilder.Append(component);
+            }
+
+            return pathBuilder.ToString();
         }
     }
 
