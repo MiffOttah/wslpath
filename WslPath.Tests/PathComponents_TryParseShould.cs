@@ -31,9 +31,9 @@ namespace WslPath.Tests
         [TestCase(@"C:Drive\Without\Root")]
         public void TryParse_WindowsPath_Failure(string path)
         {
-            bool success = PathComponents.TryParse(path, out var result);
+            bool success = PathComponents.TryParse(path, out _);
             Assert.IsFalse(success);
-            Assert.IsNull(result);
+            // Assert.IsNull(result); // value of result when TryParse returns false is undefined behavior
         }
 
         [Test]
@@ -55,18 +55,28 @@ namespace WslPath.Tests
         }
 
         [Test]
-        [TestCase(@"/tmp/Outside/WSL")]
+        [TestCase(@"/home/Outside/WSL")]
+        [TestCase(@"/mnt/Not/WSL/Drive")]
         public void TryParse_UnixPath_Failure(string path)
         {
             bool success = PathComponents.TryParse(path, out var result);
             Assert.IsFalse(success);
-            Assert.IsNull(result);
+            // Assert.IsNull(result); // value of result when TryParse returns false is undefined behavior
         }
 
         [Test]
         public void TryParse_NullPath()
         {
             Assert.Throws<ArgumentNullException>(() => PathComponents.TryParse(null, out _));
+        }
+
+        [Test]
+        public void TryParse_EmptyString()
+        {
+            bool success = PathComponents.TryParse(string.Empty, out var result);
+            Assert.IsTrue(success);
+            Assert.IsNull(result.DriveLetter);
+            CollectionAssert.IsEmpty(result.Components);
         }
     }
 }
