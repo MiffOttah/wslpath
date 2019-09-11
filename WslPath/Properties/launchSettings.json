@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "WslPath": {
+      "commandName": "Project",
+      "commandLineArgs": "--version"
+    }
+  }
+}
